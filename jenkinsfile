@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment{
+        name = "Addya Shakti"
+    }
+    parameters
+    {
+    	string(name:'person', defaultValue:'Ravi Kumar', description:"Who are you")
+    	booleanParam(name:'isMale', defaultValue:true, description:"")
+        choice(name:'City', choices:['Jaipur', 'Mumbai', 'Pune'], description:"")
+    }
+    stages 
+    {
+        stage('Run A Command') 
+           {
+            steps 
+                {
+                    sh '''
+                    date
+                    ls
+                    pwd
+                    whoami
+                    '''
+                }
+           }
+        stage('Environment Variables')
+            {
+		environment
+		{
+			name = 'Gaurav Kumar'
+		}
+                steps
+                {
+                     sh 'echo $BUILD_ID'
+                     sh 'echo $name'   
+                }
+            }
+        stage('Parameters')
+            {
+                steps
+                {
+		    echo 'Deploy on test'
+                    sh 'echo ${name}'
+                    sh 'echo ${person}'
+                }
+            }
+        stage('Deploy on Prod')
+        {
+            steps
+            {
+                echo "Deploy on Prod"    
+            }
+        }
+    }
+}
